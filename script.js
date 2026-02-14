@@ -721,6 +721,128 @@ function setupPhaseIndicators() {
 }
 
 // ===================================
+// EXPANDED CARD OVERLAY (Mobile)
+// ===================================
+let cardOverlay = null;
+let expandedCardIndex = 0;
+
+function createCardOverlay() {
+    if (cardOverlay) return;
+    cardOverlay = document.createElement('div');
+    cardOverlay.className = 'card-overlay';
+    cardOverlay.innerHTML = `
+        <button class="card-overlay-close" aria-label="Close">✕</button>
+        <div class="expanded-card">
+            <img src="" alt="">
+            <div class="expanded-card-content">
+                <span class="expanded-phase"></span>
+                <p class="expanded-caption"></p>
+            </div>
+            <div class="expanded-card-nav">
+                <button class="expanded-nav-btn expanded-prev-btn">← Prev</button>
+                <button class="expanded-nav-btn expanded-next-btn">Next →</button>
+            </div>
+            <div class="expanded-card-counter"></div>
+        </div>
+    `;
+    document.body.appendChild(cardOverlay);
+
+    // Close button
+    cardOverlay.querySelector('.card-overlay-close').addEventListener('click', closeExpandedCard);
+
+    // Overlay background click to close
+    cardOverlay.addEventListener('click', function(e) {
+        if (e.target === cardOverlay) closeExpandedCard();
+    });
+
+    // Navigation buttons
+    cardOverlay.querySelector('.expanded-prev-btn').addEventListener('click', function() {
+        navigateExpandedCard('prev');
+    });
+    cardOverlay.querySelector('.expanded-next-btn').addEventListener('click', function() {
+        navigateExpandedCard('next');
+    });
+
+    // Touch swipe on expanded card
+    let exTouchStartX = 0;
+    const expandedEl = cardOverlay.querySelector('.expanded-card');
+    expandedEl.addEventListener('touchstart', function(e) {
+        exTouchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    expandedEl.addEventListener('touchend', function(e) {
+        const diff = exTouchStartX - e.changedTouches[0].screenX;
+        if (Math.abs(diff) > 50) {
+            navigateExpandedCard(diff > 0 ? 'next' : 'prev');
+        }
+    }, { passive: true });
+}
+
+function openExpandedCard(index) {
+    if (!isMobile) return;
+    createCardOverlay();
+    expandedCardIndex = index;
+    updateExpandedCard();
+    cardOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeExpandedCard() {
+    if (!cardOverlay) return;
+    cardOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function navigateExpandedCard(direction) {
+    const cards = document.querySelectorAll('.timeline-card');
+    if (direction === 'next' && expandedCardIndex < cards.length - 1) {
+        expandedCardIndex++;
+    } else if (direction === 'prev' && expandedCardIndex > 0) {
+        expandedCardIndex--;
+    } else {
+        return;
+    }
+    updateExpandedCard();
+
+    // Also sync the background card index
+    mobileCardIndex = expandedCardIndex;
+    showMobileCard(mobileCardIndex);
+}
+
+function updateExpandedCard() {
+    const cards = document.querySelectorAll('.timeline-card');
+    if (!cards[expandedCardIndex]) return;
+    const card = cards[expandedCardIndex];
+    const img = card.querySelector('img');
+    const phase = card.querySelector('.timeline-phase');
+    const caption = card.querySelector('.timeline-caption');
+
+    const exImg = cardOverlay.querySelector('.expanded-card img');
+    const exPhase = cardOverlay.querySelector('.expanded-phase');
+    const exCaption = cardOverlay.querySelector('.expanded-caption');
+    const exCounter = cardOverlay.querySelector('.expanded-card-counter');
+    const prevBtn = cardOverlay.querySelector('.expanded-prev-btn');
+    const nextBtn = cardOverlay.querySelector('.expanded-next-btn');
+
+    exImg.src = img.src;
+    exImg.alt = img.alt;
+    exPhase.textContent = phase ? phase.textContent : '';
+    exCaption.textContent = caption ? caption.textContent : '';
+    exCounter.textContent = (expandedCardIndex + 1) + ' / ' + cards.length;
+    prevBtn.disabled = expandedCardIndex === 0;
+    nextBtn.disabled = expandedCardIndex === cards.length - 1;
+}
+
+function setupCardTapHandlers() {
+    if (!isMobile) return;
+    const cards = document.querySelectorAll('.timeline-card');
+    cards.forEach(function(card, index) {
+        card.addEventListener('click', function() {
+            openExpandedCard(index);
+        });
+    });
+}
+
+// ===================================
 // FINAL MESSAGE HEARTS
 // ===================================
 function startFinalHearts() {
@@ -804,6 +926,7 @@ timelineBtn.addEventListener('click', () => {
     buildTimeline();
     setupPhaseIndicators();
     setupTouchSwipe();
+    setupCardTapHandlers();
     switchScreen(countdownScreen, timelineScreen);
     
     const cards = document.querySelectorAll('.timeline-card');
