@@ -588,7 +588,12 @@ function setupTimelineObserver() {
 
 // Timeline navigation with swipe animation
 function scrollTimeline(direction) {
-    const scrollAmount = 340; // Card width + gap
+    // Get actual card width dynamically from first card
+    const firstCard = timelineContainer.querySelector('.timeline-card');
+    const cardWidth = firstCard ? firstCard.offsetWidth : 320;
+    const gap = 20; // CSS gap between cards (1.5rem ≈ 20px)
+    const scrollAmount = cardWidth + gap;
+    
     const currentScroll = timelineContainer.scrollLeft;
     const cards = document.querySelectorAll('.timeline-card');
     
@@ -713,7 +718,13 @@ prevBtn.addEventListener('click', () => scrollTimeline('prev'));
 nextBtn.addEventListener('click', () => scrollTimeline('next'));
 
 // Touch swipe support for mobile
+let touchSwipeInitialized = false;
+
 function setupTouchSwipe() {
+    // Prevent duplicate event listeners
+    if (touchSwipeInitialized) return;
+    touchSwipeInitialized = true;
+    
     let touchStartX = 0;
     let touchEndX = 0;
     
