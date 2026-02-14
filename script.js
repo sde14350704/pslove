@@ -827,7 +827,7 @@ function updateExpandedCard() {
     exImg.alt = img.alt;
     exPhase.textContent = phase ? phase.textContent : '';
     exCaption.textContent = caption ? caption.textContent : '';
-    exCounter.textContent = (expandedCardIndex + 1) + ' / ' + cards.length;
+    exCounter.textContent = `${expandedCardIndex + 1} / ${cards.length}`;
     prevBtn.disabled = expandedCardIndex === 0;
     nextBtn.disabled = expandedCardIndex === cards.length - 1;
 }
