@@ -386,6 +386,7 @@ function fadeOutIntroMusic(callback) {
             introMusic.volume -= 0.05;
         } else {
             introMusic.pause();
+            introMusic.currentTime = 0;
             introMusic.volume = 0.5;
             clearInterval(fadeInterval);
             if (callback) callback();
@@ -411,9 +412,9 @@ function playEmotionalMusic() {
 function toggleMusic() {
     isMuted = !isMuted;
     
-    if (currentMusic) {
-        currentMusic.muted = isMuted;
-    }
+    // Mute/unmute both audio elements to prevent any lingering playback
+    introMusic.muted = isMuted;
+    emotionalMusic.muted = isMuted;
     
     musicIcon.textContent = isMuted ? '🔇' : '🔊';
 }
@@ -758,27 +759,26 @@ noBtn.addEventListener('touchstart', (e) => {
 yesBtn.addEventListener('click', () => {
     triggerConfetti();
     
-    // On mobile, start emotional music play immediately in the user gesture context
+    // Immediately stop intro music to prevent overlap on mobile
+    introMusic.pause();
+    introMusic.currentTime = 0;
+    
+    // Start emotional music in the user gesture context
     // (mobile browsers require play() to be called directly from user interaction)
+    emotionalMusic.muted = isMuted;
     emotionalMusic.volume = 0;
+    currentMusic = emotionalMusic;
     emotionalMusic.play().then(() => {
-        fadeOutIntroMusic(() => {
-            // Fade in emotional music (already playing at volume 0)
-            currentMusic = emotionalMusic;
-            const fadeInterval = setInterval(() => {
-                if (emotionalMusic.volume < 0.5) {
-                    emotionalMusic.volume = Math.min(emotionalMusic.volume + 0.05, 0.5);
-                } else {
-                    clearInterval(fadeInterval);
-                }
-            }, 100);
-        });
+        // Fade in emotional music (already playing at volume 0)
+        const fadeInterval = setInterval(() => {
+            if (emotionalMusic.volume < 0.5) {
+                emotionalMusic.volume = Math.min(emotionalMusic.volume + 0.05, 0.5);
+            } else {
+                clearInterval(fadeInterval);
+            }
+        }, 100);
     }).catch(e => {
-        console.log('Audio play blocked:', e.message);
-        // Fallback: still switch music reference even if autoplay blocked
-        fadeOutIntroMusic(() => {
-            currentMusic = emotionalMusic;
-        });
+        console.log('Emotional music autoplay blocked:', e.message);
     });
     
     setTimeout(() => {

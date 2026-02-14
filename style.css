@@ -917,6 +917,8 @@ body {
         display: none;
         opacity: 1;
         transform: none;
+        overflow-y: auto;
+        max-height: calc(100vh - 260px);
     }
     
     .timeline-card.visible {
@@ -936,7 +938,12 @@ body {
     }
     
     .timeline-card img {
-        height: 280px;
+        height: 240px;
+    }
+    
+    .timeline-card-content {
+        padding: 1rem;
+        padding-bottom: 1.2rem;
     }
     
     .timeline-phases {
@@ -1009,7 +1016,7 @@ body {
     }
     
     .timeline-card img {
-        height: 250px;
+        height: 200px;
     }
     
     .countdown-item {
