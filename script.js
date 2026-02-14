@@ -186,9 +186,6 @@ function generateCaption(filename) {
     // Replace underscores with spaces
     name = name.replace(/_/g, ' ');
     
-    // Clean up parentheses content
-    name = name.replace(/\(/g, '(').replace(/\)/g, ')');
-    
     // Capitalize first letter
     name = name.charAt(0).toUpperCase() + name.slice(1);
     
@@ -293,7 +290,7 @@ function preloadImages() {
 // ===================================
 function playIntroMusic() {
     introMusic.volume = 0.5;
-    introMusic.play().catch(e => console.log('Audio play failed:', e));
+    introMusic.play().catch(e => console.log('Audio autoplay blocked by browser:', e.message));
     currentMusic = introMusic;
 }
 
@@ -312,7 +309,7 @@ function fadeOutIntroMusic(callback) {
 
 function playEmotionalMusic() {
     emotionalMusic.volume = 0;
-    emotionalMusic.play().catch(e => console.log('Audio play failed:', e));
+    emotionalMusic.play().catch(e => console.log('Audio autoplay blocked by browser:', e.message));
     currentMusic = emotionalMusic;
     
     // Fade in
