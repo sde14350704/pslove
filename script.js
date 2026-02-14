@@ -765,8 +765,8 @@ yesBtn.addEventListener('click', () => {
     
     // Start emotional music in the user gesture context
     // (mobile browsers require play() to be called directly from user interaction)
-    emotionalMusic.volume = 0;
     emotionalMusic.muted = isMuted;
+    emotionalMusic.volume = 0;
     currentMusic = emotionalMusic;
     emotionalMusic.play().then(() => {
         // Fade in emotional music (already playing at volume 0)
@@ -778,7 +778,7 @@ yesBtn.addEventListener('click', () => {
             }
         }, 100);
     }).catch(e => {
-        console.log('Audio play blocked:', e.message);
+        console.log('Emotional music autoplay blocked:', e.message);
     });
     
     setTimeout(() => {
