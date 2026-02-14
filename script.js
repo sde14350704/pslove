@@ -238,6 +238,14 @@ let imagesLoaded = 0;
 let totalImages = allImageFiles.length;
 let isMuted = false;
 let currentMusic = null;
+let isMobile = window.innerWidth <= 768;
+let mobileCardIndex = 0;
+let totalCards = 0;
+
+// Update isMobile on resize
+window.addEventListener('resize', () => {
+    isMobile = window.innerWidth <= 768;
+});
 
 // ===================================
 // UTILITY FUNCTIONS
@@ -588,6 +596,42 @@ function setupTimelineObserver() {
 
 // Timeline navigation with swipe animation
 function scrollTimeline(direction) {
+    if (isMobile) {
+        // Mobile: single card swipe mode
+        const cards = document.querySelectorAll('.timeline-card');
+        if (cards.length === 0) return;
+        
+        const prevIndex = mobileCardIndex;
+        
+        if (direction === 'next' && mobileCardIndex < cards.length - 1) {
+            mobileCardIndex++;
+        } else if (direction === 'prev' && mobileCardIndex > 0) {
+            mobileCardIndex--;
+        } else {
+            return; // At boundary
+        }
+        
+        // Hide previous card
+        cards[prevIndex].classList.remove('visible', 'swipe-enter-left', 'swipe-enter-right');
+        cards[prevIndex].style.display = 'none';
+        
+        // Show new card with animation
+        const newCard = cards[mobileCardIndex];
+        newCard.style.display = 'flex';
+        newCard.classList.add('visible');
+        newCard.classList.add(direction === 'next' ? 'swipe-enter-right' : 'swipe-enter-left');
+        
+        // Remove animation class after it completes
+        setTimeout(() => {
+            newCard.classList.remove('swipe-enter-left', 'swipe-enter-right');
+        }, 350);
+        
+        updateCardCounter();
+        updateActivePhaseIndicator();
+        return;
+    }
+    
+    // Desktop: horizontal scroll mode
     // Get actual card width dynamically from first card
     const firstCard = timelineContainer.querySelector('.timeline-card');
     const cardWidth = firstCard ? firstCard.offsetWidth : 320;
@@ -614,6 +658,38 @@ function scrollTimeline(direction) {
     });
 }
 
+function updateCardCounter() {
+    const counter = document.getElementById('card-counter');
+    if (counter) {
+        counter.textContent = `${mobileCardIndex + 1} / ${totalCards}`;
+    }
+}
+
+function updateActivePhaseIndicator() {
+    const cards = document.querySelectorAll('.timeline-card');
+    if (cards.length === 0) return;
+    const currentPhase = cards[mobileCardIndex].dataset.phase;
+    const indicators = document.querySelectorAll('.phase-indicator');
+    indicators.forEach(ind => {
+        ind.classList.toggle('active', ind.dataset.phase === currentPhase);
+    });
+}
+
+function showMobileCard(index) {
+    const cards = document.querySelectorAll('.timeline-card');
+    cards.forEach((card, i) => {
+        card.classList.remove('visible', 'swipe-enter-left', 'swipe-enter-right');
+        card.style.display = 'none';
+    });
+    if (cards[index]) {
+        cards[index].style.display = 'flex';
+        cards[index].classList.add('visible');
+    }
+    mobileCardIndex = index;
+    updateCardCounter();
+    updateActivePhaseIndicator();
+}
+
 // Phase indicator click handling
 function setupPhaseIndicators() {
     const indicators = document.querySelectorAll('.phase-indicator');
@@ -624,7 +700,16 @@ function setupPhaseIndicators() {
             const firstCardOfPhase = document.querySelector(`.timeline-card[data-phase="${phase}"]`);
             
             if (firstCardOfPhase) {
-                firstCardOfPhase.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+                if (isMobile) {
+                    // Mobile: jump to that card in swipe mode
+                    const cards = Array.from(document.querySelectorAll('.timeline-card'));
+                    const idx = cards.indexOf(firstCardOfPhase);
+                    if (idx !== -1) {
+                        showMobileCard(idx);
+                    }
+                } else {
+                    firstCardOfPhase.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+                }
                 
                 // Update active indicator
                 indicators.forEach(ind => ind.classList.remove('active'));
@@ -673,8 +758,27 @@ noBtn.addEventListener('touchstart', (e) => {
 yesBtn.addEventListener('click', () => {
     triggerConfetti();
     
-    fadeOutIntroMusic(() => {
-        playEmotionalMusic();
+    // On mobile, start emotional music play immediately in the user gesture context
+    // (mobile browsers require play() to be called directly from user interaction)
+    emotionalMusic.volume = 0;
+    emotionalMusic.play().then(() => {
+        fadeOutIntroMusic(() => {
+            // Fade in emotional music (already playing at volume 0)
+            currentMusic = emotionalMusic;
+            const fadeInterval = setInterval(() => {
+                if (emotionalMusic.volume < 0.5) {
+                    emotionalMusic.volume = Math.min(emotionalMusic.volume + 0.05, 0.5);
+                } else {
+                    clearInterval(fadeInterval);
+                }
+            }, 100);
+        });
+    }).catch(e => {
+        console.log('Audio play blocked:', e.message);
+        // Fallback: still switch music reference even if autoplay blocked
+        fadeOutIntroMusic(() => {
+            currentMusic = emotionalMusic;
+        });
     });
     
     setTimeout(() => {
@@ -702,15 +806,25 @@ timelineBtn.addEventListener('click', () => {
     setupTouchSwipe();
     switchScreen(countdownScreen, timelineScreen);
     
-    // Make initial cards visible
-    setTimeout(() => {
-        const cards = document.querySelectorAll('.timeline-card');
-        cards.forEach((card, index) => {
-            if (index < 3) {
-                card.classList.add('visible');
-            }
-        });
-    }, 300);
+    const cards = document.querySelectorAll('.timeline-card');
+    totalCards = cards.length;
+    
+    if (isMobile) {
+        // Mobile: show first card only in swipe mode
+        mobileCardIndex = 0;
+        setTimeout(() => {
+            showMobileCard(0);
+        }, 300);
+    } else {
+        // Desktop: make initial cards visible
+        setTimeout(() => {
+            cards.forEach((card, index) => {
+                if (index < 3) {
+                    card.classList.add('visible');
+                }
+            });
+        }, 300);
+    }
 });
 
 // Timeline navigation
@@ -743,10 +857,8 @@ function setupTouchSwipe() {
         
         if (Math.abs(diff) > swipeThreshold) {
             if (diff > 0) {
-                // Swiped left - go to next
                 scrollTimeline('next');
             } else {
-                // Swiped right - go to prev
                 scrollTimeline('prev');
             }
         }
