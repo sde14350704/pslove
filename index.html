@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saji ❤️ Bernix - Our Love Story</title>
+    
+    <!-- Preload critical images -->
+    <link rel="preload" href="assets/01_first_meet_pheonix_mall_09_11_2025.jpeg" as="image">
+    <link rel="preload" href="assets/10_our_engagement_day_10_31_2025.jpeg" as="image">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Canvas Confetti CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Floating Hearts Background -->
+    <div id="floating-hearts" class="floating-hearts"></div>
+
+    <!-- Loading Screen -->
+    <section id="loading-screen" class="screen loading-screen active">
+        <div class="loading-content">
+            <div class="heart-loader">
+                <span class="heart">❤️</span>
+            </div>
+            <p class="loading-text">Preparing something special for Saji…</p>
+            <div class="loading-progress">
+                <div class="progress-bar"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Intro Landing Screen -->
+    <section id="intro-screen" class="screen intro-screen">
+        <div class="intro-content">
+            <h1 class="couple-names">Saji <span class="heart-icon">❤️</span> Bernix</h1>
+            <p class="wedding-date">May 29, 2026</p>
+            <p class="intro-subtitle">A Love Story Worth Scrolling</p>
+            <button id="start-btn" class="start-btn">
+                <span>Begin Our Journey</span>
+                <span class="btn-heart">💕</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- Proposal Screen -->
+    <section id="proposal-screen" class="screen proposal-screen">
+        <div class="proposal-content">
+            <h2 class="proposal-title">Saji…</h2>
+            <p class="proposal-question">
+                Will you officially agree to handle Bernix<br>
+                for the rest of your life?
+            </p>
+            <div class="proposal-buttons">
+                <button id="yes-btn" class="btn yes-btn">Okay Fine 😌</button>
+                <button id="no-btn" class="btn no-btn">No</button>
+            </div>
+            <p id="no-message" class="no-message"></p>
+        </div>
+    </section>
+
+    <!-- Love Letter Screen -->
+    <section id="love-letter-screen" class="screen love-letter-screen">
+        <div class="love-letter-content">
+            <div class="letter-container">
+                <div id="typewriter" class="typewriter"></div>
+                <span class="cursor">|</span>
+            </div>
+            <button id="continue-btn" class="continue-btn hidden">Continue Our Story →</button>
+        </div>
+    </section>
+
+    <!-- Countdown Screen -->
+    <section id="countdown-screen" class="screen countdown-screen">
+        <div class="countdown-content">
+            <h2 class="countdown-title">Counting Down to Forever</h2>
+            <div class="countdown-timer">
+                <div class="countdown-item">
+                    <span id="days" class="countdown-value">000</span>
+                    <span class="countdown-label">Days</span>
+                </div>
+                <div class="countdown-item">
+                    <span id="hours" class="countdown-value">00</span>
+                    <span class="countdown-label">Hours</span>
+                </div>
+                <div class="countdown-item">
+                    <span id="minutes" class="countdown-value">00</span>
+                    <span class="countdown-label">Minutes</span>
+                </div>
+                <div class="countdown-item">
+                    <span id="seconds" class="countdown-value">00</span>
+                    <span class="countdown-label">Seconds</span>
+                </div>
+            </div>
+            <p class="countdown-label-text">Time left before Bernix officially becomes Saji's responsibility 😄</p>
+            <button id="timeline-btn" class="timeline-btn">Explore Our Journey →</button>
+        </div>
+    </section>
+
+    <!-- Timeline Screen -->
+    <section id="timeline-screen" class="screen timeline-screen">
+        <div class="timeline-header">
+            <h2 class="timeline-title">Our Love Journey</h2>
+            <div class="timeline-nav">
+                <button id="prev-btn" class="nav-btn prev-btn">←</button>
+                <button id="next-btn" class="nav-btn next-btn">→</button>
+            </div>
+        </div>
+        <div id="timeline-container" class="timeline-container">
+            <!-- Timeline items will be dynamically generated -->
+        </div>
+        <div class="timeline-phases">
+            <span class="phase-indicator" data-phase="1">Initial Meetup</span>
+            <span class="phase-indicator" data-phase="2">Blossom Through Chat</span>
+            <span class="phase-indicator" data-phase="3">Engagement Moment</span>
+            <span class="phase-indicator" data-phase="4">Post Engagement Love</span>
+            <span class="phase-indicator" data-phase="5">Her Birthday</span>
+            <span class="phase-indicator" data-phase="6">New Year</span>
+            <span class="phase-indicator" data-phase="7">January Outing</span>
+        </div>
+        <button id="final-btn" class="final-btn">See Something Special ❤️</button>
+    </section>
+
+    <!-- Final Message Screen -->
+    <section id="final-screen" class="screen final-screen">
+        <div class="final-content">
+            <button id="reveal-btn" class="reveal-btn">
+                <span class="heart-glow">❤️</span>
+                <span>Tap to see the rest of our story</span>
+            </button>
+            <div id="final-message" class="final-message hidden">
+                <p>In every lifetime,<br>
+                I would still find you.<br>
+                Still choose you.<br>
+                Still annoy you.</p>
+                <p>And on May 29, 2026,<br>
+                I don't just marry you —<br>
+                I get to live my favorite life,<br>
+                with my favorite person.</p>
+                <p class="signature">Forever Yours,<br>Bernix ❤️</p>
+            </div>
+        </div>
+        <div id="final-hearts" class="final-hearts"></div>
+    </section>
+
+    <!-- Music Controls -->
+    <button id="music-toggle" class="music-toggle">
+        <span id="music-icon">🔊</span>
+    </button>
+
+    <!-- Audio Elements -->
+    <audio id="intro-music" loop>
+        <source src="assets/music/cartoon-funny-kids.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="emotional-music" loop>
+        <source src="assets/music/Eppadi_Vandhaayo.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
