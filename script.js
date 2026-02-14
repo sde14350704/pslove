@@ -5,6 +5,72 @@
 // ===================================
 // IMAGE DATA - Organized by Phases
 // ===================================
+
+// Rom-com style descriptions for each image
+const romComCaptions = {
+    "01": "Chapter 1: The Meet-Cute at Phoenix Mall — Spoiler: It wasn't love at first sight... it was love at first awkward hello! 💫",
+    "02": "The DM Slide That Changed Everything — When he hit send, the universe hit 'ship'! 💌",
+    "03": "Ice Cream Date #1 — Because every great love story needs a sweet beginning at Ibaco! 🍦",
+    "04": "She Drew Hearts, He Lost His — Her blackboard art proved love was already in the script! 🎨",
+    "05": "When Even AI Ships You — Gemini confirmed what the stars already knew! 🤖💕",
+    "06": "AI Edit #2: Still Obsessed — Plot twist: Even artificial intelligence can't resist this love! ✨",
+    "07": "The Royal Welcome — He rolled out the red carpet (okay, maybe just flowers) for his queen! 👑",
+    "08": "Pre-Engagement Ice Cream — Nervous butterflies? Nothing a scoop can't fix! 🍨",
+    "09": "Morning Blessings — Starting the biggest day with Murugan's divine approval! 🙏",
+    "10": "THE Engagement Day — And just like that, two became one... officially! 💍",
+    "11": "The Ring That Sealed The Deal — Proof that this isn't just a situationship! 💎",
+    "12": "Forever Starts Now — Main characters in their own rom-com, finally engaged! 🎬",
+    "13": "That Look of Love — Her eyes said 'yes' before her lips did! 👀💕",
+    "14": "Spoon-Fed Love — When he feeds her ice cream, it's basically a love language! 🥄",
+    "15": "Love Letter Loading — Because texting 'I love you' wasn't enough! 📜",
+    "16": "Valparai Views & Vows — Stunned by scenery, but she stuns him more! 🏔️",
+    "17": "Future So Bright — Looking towards forever in Valparai, together! 🌅",
+    "18": "Sun-Kissed at Aliyar Dam — The sun wasn't the only one giving kisses! ☀️💋",
+    "19": "Mehandi Magic — Her hands tell a love story in henna! 🧡",
+    "20": "Pinky Promise, Forever Edition — Holding hands isn't just cute, it's a contract! 🤝",
+    "21": "Art Imitates Heart — Her tracing art screams 'we're soulmates'! 🖌️",
+    "22": "Doodle Diaries — The cutest highlights from his queen's creative corner! ✏️",
+    "23": "Dad Knew All Along — Plot twist: This ship was sailed before we even knew! 🙌",
+    "23a": "Birthday Ride Begins — She's basically his premium Rapido, but make it romantic! 🛵",
+    "24": "Zootopia 2 Date — Taking his love on a wild animated adventure! 🎥",
+    "25": "Post-Movie Punishment — She got him back for being adorably annoying! 😜",
+    "26": "Full Circle Moment — Back to Phoenix Mall, this time with extra feels! 🔄",
+    "27": "Christmas Tree Glow — That tree's got nothing on this couple's shine! 🎄✨",
+    "28": "The Promise Gift — 'I'll be there' in gift form! 🎁",
+    "29": "Truffle Tummy Time — Birthday eve calories don't count! 🍫",
+    "30": "Cake O'Clock — Mandatory birthday pic with mandatory sweetness! 🎂",
+    "31": "Heartbeats in Sync — When you can literally hear your love for each other! 💓",
+    "32": "Morning Beach Bliss — Private moments, public love declaration! 🏖️",
+    "33": "Limitless Love — She proved her love is as vast as the ocean! 🌊",
+    "34": "Standing Strong Together — Waves came, but they stayed. Metaphor unlocked! 🌊💪",
+    "35": "Caught Being Adorable — He tried to 'eat' her playfully... and got caught! 📸",
+    "36": "Pookie Mode: Activated — Play Bae unlocked his softest side! 🥺",
+    "37": "The Artist Queen — She painted, he swooned. Classic! 👸🎨",
+    "38": "Love in Every Brushstroke — Play Bae became the backdrop for their art! 🖼️",
+    "39": "Mirror Mirror — Even reflections are obsessed with this couple! 🪞",
+    "40": "Photobooth Chronicles — Pre-click candid magic! 📷",
+    "41": "Last Sip, First Wings — She's ready to fly to him anytime! 🥤✈️",
+    "42": "Starbucks Checkpoint — End of birthday weekend, start of forever mode! ☕",
+    "43": "Virtual New Year, Real Love — 2026 started close, even from afar! 🎆",
+    "44": "Parashakthi Movie Date — New year, new outing, same soulmates! 🎬",
+    "45": "Mirror's Favorite Couple — Zudio mirror became a fan again! 🪞👕",
+    "46": "Shopping & Breezing — Noon rides with perfect weather and perfect company! 🛍️",
+    "47": "Beach Proposal 2.0 — Back to their 'private beach' with a sweet surprise! 💍🏖️",
+    "48": "Vibes: Immaculate — This beach just gets their energy! 🌴",
+    "49": "Sun Got Shy — Even the sun couldn't handle her beauty! ☀️😳",
+    "50": "Sand Art Goals — Names in sand, love in hearts, glitter by Saji! ✨🏖️",
+    "51": "Her Happy Face — The smile he lives to see every single day! 😊",
+    "52": "Mirror Selfie Supreme — Even reflections agree: this love is rare! 🪞💕",
+    "53": "Fashion Trial Mode — Looking good for him, always! 👗",
+    "54": "Never-Ending Ride — Wishing this journey could last forever! 🛵💨",
+    "55": "Love Birds at DakshinaChitra — Cultural date with couple goals! 🕊️",
+    "56": "Mirror's Testimony — This pic spoke volumes about their love! 🪞📖",
+    "57": "Pottery Queen — Her skills came out and absolutely slayed! 🏺",
+    "58": "Patience Level: Pottery — When he held back for art's sake! 🎭",
+    "59": "Honeymoon Phase Energy — Happy faces, happier hearts! 🥰",
+    "60": "Hearts Connected — Forever linked, like this beautiful moment! 💕🔗"
+};
+
 const imagePhases = {
     1: { // Initial Meetup → 01, 02, 03
         name: "Initial Meetup",
@@ -101,28 +167,33 @@ const allImageFiles = [
     "60_our_heart_will_always_be_connected_like_this_my_love.jpg"
 ];
 
-// No button escape messages
+// No button escape messages - comical rom-com style
 const noMessages = [
-    "Nice try.",
-    "Not an available option.",
-    "Already approved in 2024.",
-    "System blocked that choice.",
-    "Bernix will cry.",
-    "Return to YES."
+    "Nice try, but that button is just for show! 😏",
+    "Error 404: 'No' option not found in this love story!",
+    "Plot twist: That button doesn't actually work! 🎬",
+    "The universe has already shipped us! 💫",
+    "Even the button knows we're soulmates! 💕",
+    "Bernix.exe will crash if you click that! 😭",
+    "This isn't that kind of rom-com! Return to YES! 🎭",
+    "Fate has entered the chat... and disabled 'No'! ✨"
 ];
 
-// Love letter lines
+// Love letter lines - Soulmates edition
 const loveLetterLines = [
-    "We started as two normal people.",
-    "Now we are planning a wedding.",
+    "In a world of 8 billion people…",
+    "The universe decided we were soulmates. 💫",
     "",
-    "From one message…",
-    "To thousands of memories…",
+    "From strangers to 'forever' in one plot twist…",
+    "Like the best rom-com ever written. 🎬",
     "",
-    "You didn't enter my life.",
-    "You became my life.",
+    "You didn't just walk into my life…",
+    "You became my favorite chapter. 📖",
     "",
-    "And this… is just the beginning."
+    "They say soulmates are rare…",
+    "Lucky me, I found mine on the first try. 💕",
+    "",
+    "And this… is just the beginning of us."
 ];
 
 // Wedding date
@@ -172,8 +243,15 @@ let currentMusic = null;
 // UTILITY FUNCTIONS
 // ===================================
 
-// Generate caption from filename
+// Generate caption from filename - with rom-com style
 function generateCaption(filename) {
+    // Extract image number for rom-com caption lookup
+    const numMatch = filename.match(/^(\d+[a-z]?)_/);
+    if (numMatch && romComCaptions[numMatch[1]]) {
+        return romComCaptions[numMatch[1]];
+    }
+    
+    // Fallback to original method if no rom-com caption exists
     // Remove extension
     let name = filename.replace(/\.(jpg|jpeg|png|JPG|JPEG|PNG)$/, '');
     
@@ -508,10 +586,28 @@ function setupTimelineObserver() {
     });
 }
 
-// Timeline navigation
+// Timeline navigation with swipe animation
 function scrollTimeline(direction) {
-    const scrollAmount = 320; // Card width + gap
+    // Get actual card width dynamically from first card
+    const firstCard = timelineContainer.querySelector('.timeline-card');
+    const cardWidth = firstCard ? firstCard.offsetWidth : 320;
+    const gap = 20; // CSS gap between cards (1.5rem ≈ 20px)
+    const scrollAmount = cardWidth + gap;
+    
     const currentScroll = timelineContainer.scrollLeft;
+    const cards = document.querySelectorAll('.timeline-card');
+    
+    // Add swipe animation class to all visible cards
+    cards.forEach(card => {
+        if (card.classList.contains('visible')) {
+            card.classList.add(direction === 'next' ? 'swipe-left' : 'swipe-right');
+            // Remove animation class after animation completes
+            setTimeout(() => {
+                card.classList.remove('swipe-left', 'swipe-right');
+            }, 400);
+        }
+    });
+    
     timelineContainer.scrollTo({
         left: currentScroll + (direction === 'next' ? scrollAmount : -scrollAmount),
         behavior: 'smooth'
@@ -603,6 +699,7 @@ continueBtn.addEventListener('click', () => {
 timelineBtn.addEventListener('click', () => {
     buildTimeline();
     setupPhaseIndicators();
+    setupTouchSwipe();
     switchScreen(countdownScreen, timelineScreen);
     
     // Make initial cards visible
@@ -619,6 +716,42 @@ timelineBtn.addEventListener('click', () => {
 // Timeline navigation
 prevBtn.addEventListener('click', () => scrollTimeline('prev'));
 nextBtn.addEventListener('click', () => scrollTimeline('next'));
+
+// Touch swipe support for mobile
+let touchSwipeInitialized = false;
+
+function setupTouchSwipe() {
+    // Prevent duplicate event listeners
+    if (touchSwipeInitialized) return;
+    touchSwipeInitialized = true;
+    
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    timelineContainer.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    
+    timelineContainer.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipeGesture();
+    }, { passive: true });
+    
+    function handleSwipeGesture() {
+        const swipeThreshold = 50;
+        const diff = touchStartX - touchEndX;
+        
+        if (Math.abs(diff) > swipeThreshold) {
+            if (diff > 0) {
+                // Swiped left - go to next
+                scrollTimeline('next');
+            } else {
+                // Swiped right - go to prev
+                scrollTimeline('prev');
+            }
+        }
+    }
+}
 
 // Go to final screen
 finalBtn.addEventListener('click', () => {
