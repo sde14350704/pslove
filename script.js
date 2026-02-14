@@ -761,19 +761,24 @@ yesBtn.addEventListener('click', () => {
     // On mobile, start emotional music play immediately in the user gesture context
     // (mobile browsers require play() to be called directly from user interaction)
     emotionalMusic.volume = 0;
-    const emotionalPlayPromise = emotionalMusic.play().catch(e => console.log('Audio play blocked:', e.message));
-    
-    fadeOutIntroMusic(() => {
-        // Fade in emotional music (already playing at volume 0)
-        currentMusic = emotionalMusic;
-        const fadeInterval = setInterval(() => {
-            if (emotionalMusic.volume < 0.45) {
-                emotionalMusic.volume = Math.min(emotionalMusic.volume + 0.05, 0.5);
-            } else {
-                emotionalMusic.volume = 0.5;
-                clearInterval(fadeInterval);
-            }
-        }, 100);
+    emotionalMusic.play().then(() => {
+        fadeOutIntroMusic(() => {
+            // Fade in emotional music (already playing at volume 0)
+            currentMusic = emotionalMusic;
+            const fadeInterval = setInterval(() => {
+                if (emotionalMusic.volume < 0.5) {
+                    emotionalMusic.volume = Math.min(emotionalMusic.volume + 0.05, 0.5);
+                } else {
+                    clearInterval(fadeInterval);
+                }
+            }, 100);
+        });
+    }).catch(e => {
+        console.log('Audio play blocked:', e.message);
+        // Fallback: still switch music reference even if autoplay blocked
+        fadeOutIntroMusic(() => {
+            currentMusic = emotionalMusic;
+        });
     });
     
     setTimeout(() => {
